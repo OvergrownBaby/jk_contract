@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="UTF-8")
 
 setup(
     name="jk_contract",
-    version="1.0.4",
+    version="1.0.7",
     description="Toolkit with functions designed to extract various information from JK contracts", 
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -17,7 +17,7 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     python_requires=">=3.7, <4",
-    install_requires=["docx2python", "pathlib", "regex", "pandas", "numpy"],
+    install_requires=["docx2python", "regex", "pandas", "numpy"],
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # `pip` to create the appropriate form of executable for the target

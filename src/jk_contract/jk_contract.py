@@ -18,8 +18,10 @@ from .regex_dictionary import get_section_regex
 
 class Contract:
     def __init__(self, path):
+        print(path)
+        self.exp = '(华泰)|(招商)(?!银行)|(中信)(?!建投)|(国信)|(广发)|(海通)|(申万)|(光大)|(平安)|(国君)|(兴业)|(招行)|(招)(?:商银)(行)|(建投)'
         self.path = path
-        self.product_name = regex.search('九坤.+(?=\.doc(|x))', path).group()
+        self.product_name = regex.search('(九坤|方达).+?基金', path).group()
         self.document = docx2python(path)
         self.full_text = ''
         for table in self.document.body:
@@ -27,7 +29,10 @@ class Contract:
                 for cell in row:
                     for para in cell:
                         self.full_text += para
-        self.tg = regex.search('华泰|招商|中信|国信|广发|海通|申万|光大|平安|国君', path).group()
+        try:
+            self.tg = ''.join(filter(None,regex.search(self.exp, path).groups()))
+        except:
+            self.tg = ''
 
     def get_front_page(self):
         firstpages = {"光大":25,"平安":25,"招商":28,"海通":18,"申万":22,"国信":19,"广发":0,"国君":25,"中信":28,"华泰":23}
@@ -48,10 +53,10 @@ class Contract:
         chapter_regex = get_chapter_regex(self.tg, beg_chapter_name, end_chapter_name)
         try:
             self.chapter = regex.search(chapter_regex, self.full_text).group()
+            return self.chapter
         except:
             return 'No Regex Matches'
-        finally:
-            return self.chapter
+            
 
     def get_section_of_chapter(self, chapter, section):
         chapter = self.get_chapter(chapter)
@@ -62,24 +67,27 @@ class Contract:
             self.section = regex.search(section_regex, chapter).group()
             if self.section[0] == '：':
                 self.section = self.section.replace('：','')
+            return self.section
         except:
             return 'No Regex Matches'
-        finally:
-            return self.section
 
     # def to_pdf(): #under construnction, same as Contracts method, but only exports pdf of one contract document
 
 class Contracts:
     def __init__(self, folder_path):
+        self.exp = '(华泰)|(招商)(?!银行)|中信|(中信)(?!建投)|(国信)|(广发)|(海通)|(申万)|(光大)|(平安)|(国君)|(兴业)|(招行)|(招)(?:商银)(行)|(建投)'
         self.folder_path = folder_path
         self.all_files = []
         self.tg = []
         for root, dirs, files in os.walk(folder_path, topdown=False):
             for name in files:
                 path = os.path.join(root, name)
-                if 'output' not in path and 'docx' in path:
-                    self.all_files.append(path)
-                    self.tg.append(regex.search('华泰|招商|中信|国信|广发|海通|申万|光大|平安|国君', path).group())
+                if 'output' not in path and 'docx' in path and '补充协议' not in path:
+                    try:
+                        self.tg.append(''.join(filter(None,regex.search(self.exp, path).groups())))
+                        self.all_files.append(path)
+                    except:
+                        print('目前只支持：华泰|招商|中信建投|国信|广发|海通|申万|光大|平安|国君|兴业|招行|建投，其他托管的产品将会被忽略。')
 
     def get_chapters(self, chapter_names):
         out = {}
@@ -110,16 +118,16 @@ class Contracts:
 
     # def to_pdf(self, regex): under construction, to include functions from strategy_extract to export pdf of only regexed contents
 
-in_path = sys.argv[1]
-out_path = sys.argv[2]
-chapter = sys.argv[3]
-sections = list(sys.argv[4:])
+# in_path = sys.argv[1]
+# out_path = sys.argv[2]
+# chapter = sys.argv[3]
+# sections = list(sys.argv[4:])
 
-def main():
-    contracts = Contracts(in_path)
-    contracts.to_excel(contracts.get_df(contracts.get_sections(chapter, sections)), out_path) # works
+# def main():
+#     contracts = Contracts(in_path)
+#     contracts.to_excel(contracts.get_df(contracts.get_sections(chapter, sections)), out_path) # works
 
-if __name__=='__main__':
+# if __name__=='__main__':
 
     ### single contract class
     # contract = Contract('/Users/andy/Desktop/work/ubiquant/合同提取/首页和投资策略提取/申万/九坤交易精选2号私募证券投资基金基金合同托管版-根据第一次补充协议更新（投资端含打新）V1.2.8TX-20210302（清洁稿）.docx')
@@ -128,4 +136,4 @@ if __name__=='__main__':
 
     ### folder of contracts class
     
-    main()
+    # main()
