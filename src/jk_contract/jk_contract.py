@@ -82,13 +82,14 @@ class Contracts:
         for root, dirs, files in os.walk(folder_path, topdown=False):
             for name in files:
                 path = os.path.join(root, name)
-                if 'output' not in path and 'docx' in path and '补充协议' not in path:
+                if ('output' not in path) and ('docx' or 'doc' in path) and ('补充协议' not in path):
                     try:
                         self.tg.append(''.join(filter(None,regex.search(self.exp, path).groups())))
                         self.all_files.append(path)
                     except:
-                        print('目前只支持：华泰|招商|中信建投|国信|广发|海通|申万|光大|平安|国君|兴业|招行|建投，其他托管的产品将会被忽略。')
-
+                        print('目前只支持：华泰|招商|中信建投|国信|广发|海通|申万|光大|平安|国君|兴业|招行|建投的word文档，其他托管的产品将会被忽略。')
+                else:
+                    pass
     def get_chapters(self, chapter_names):
         out = {}
         for file_path in self.all_files:
