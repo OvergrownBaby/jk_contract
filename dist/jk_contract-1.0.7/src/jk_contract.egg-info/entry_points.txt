@@ -1,2 +1,0 @@
-[console_scripts]
-jk_contract = jk_contract:main

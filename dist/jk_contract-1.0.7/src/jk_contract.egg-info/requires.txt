@@ -1,4 +1,0 @@
-docx2python
-regex
-pandas
-numpy
