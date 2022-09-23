@@ -60,17 +60,41 @@ class Contract:
 
     def get_section_of_chapter(self, chapter, section):
         chapter = self.get_chapter(chapter)
-        beg_section_name = get_section_beg_end(self.tg, section)[0][0]
-        end_section_name = get_section_beg_end(self.tg, section)[0][1]
-        section_regex = get_section_regex(self.tg, beg_section_name, end_section_name)
+        
+        if self.tg=='中信':
+            beg_section_name1 = get_section_beg_end('中信1', section)[0][0]
+            end_section_name1 = get_section_beg_end('中信1', section)[0][1]
+            beg_section_name2 = get_section_beg_end('中信2', section)[0][0]
+            end_section_name2 = get_section_beg_end('中信2', section)[0][1]
+            self.section_regex = '({}|{})'.format(get_section_regex('中信', beg_section_name1, end_section_name1),\
+                get_section_regex('中信', beg_section_name2, end_section_name2))
+        else:
+            beg_section_name = get_section_beg_end(self.tg, section)[0][0]
+            end_section_name = get_section_beg_end(self.tg, section)[0][1]
+            self.section_regex = get_section_regex(self.tg, beg_section_name, end_section_name)
+
         try:
-            self.section = regex.search(section_regex, chapter).group()
+            self.section = regex.search(self.section_regex, chapter).group()
             if self.section[0] == '：':
                 self.section = self.section.replace('：','')
             return self.section
         except:
             return 'No Regex Matches'
-
+    
+    def get_section_regex(self, section):
+        if self.tg=='中信':
+            beg_section_name1 = get_section_beg_end('中信1', section)[0][0]
+            end_section_name1 = get_section_beg_end('中信1', section)[0][1]
+            beg_section_name2 = get_section_beg_end('中信2', section)[0][0]
+            end_section_name2 = get_section_beg_end('中信2', section)[0][1]
+            self.section_regex = '({}|{})'.format(get_section_regex('中信', beg_section_name1, end_section_name1),\
+                get_section_regex('中信', beg_section_name2, end_section_name2))
+        else:
+            beg_section_name = get_section_beg_end(self.tg, section)[0][0]
+            end_section_name = get_section_beg_end(self.tg, section)[0][1]
+            self.section_regex = get_section_regex(self.tg, beg_section_name, end_section_name)
+        print(self.section_regex)
+        
     # def to_pdf(): #under construnction, same as Contracts method, but only exports pdf of one contract document
 
 class Contracts:
@@ -103,6 +127,11 @@ class Contracts:
             contract = Contract(file_path)
             if contract.tg!='广发': out[contract.product_name] = [contract.get_section_of_chapter(chapter_name, section_name).replace('\t', ' ').replace('\n', '') for section_name in section_names]
         return out, section_names
+
+    def get_sections_regex(self, section_names):
+        for file_path in self.all_files:
+            contract = Contract(file_path)
+            contract.get_section_regex(section_names)
         
     def get_df(self, dict):
         data = dict[0]
