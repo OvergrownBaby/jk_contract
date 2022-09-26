@@ -57,7 +57,6 @@ class Contract:
         except:
             return 'No Regex Matches'
             
-
     def get_section_of_chapter(self, chapter, section):
         chapter = self.get_chapter(chapter)
         
@@ -68,6 +67,15 @@ class Contract:
             end_section_name2 = get_section_beg_end('中信2', section)[0][1]
             self.section_regex = '({}|{})'.format(get_section_regex('中信', beg_section_name1, end_section_name1),\
                 get_section_regex('中信', beg_section_name2, end_section_name2))
+        elif self.tg=='国君':
+            beg_section_name1 = get_section_beg_end('国君1', section)[0][0]
+            end_section_name1 = get_section_beg_end('国君1', section)[0][1]
+            beg_section_name2 = get_section_beg_end('国君2', section)[0][0]
+            end_section_name2 = get_section_beg_end('国君2', section)[0][1]
+            beg_section_name3 = get_section_beg_end('国君3', section)[0][0]
+            end_section_name3 = get_section_beg_end('国君3', section)[0][1]
+            self.section_regex = '({}|{}|{})'.format(get_section_regex('国君', beg_section_name1, end_section_name1),\
+                get_section_regex('国君', beg_section_name2, end_section_name2),get_section_regex('国君', beg_section_name3, end_section_name3))
         else:
             beg_section_name = get_section_beg_end(self.tg, section)[0][0]
             end_section_name = get_section_beg_end(self.tg, section)[0][1]
@@ -89,6 +97,15 @@ class Contract:
             end_section_name2 = get_section_beg_end('中信2', section)[0][1]
             self.section_regex = '({}|{})'.format(get_section_regex('中信', beg_section_name1, end_section_name1),\
                 get_section_regex('中信', beg_section_name2, end_section_name2))
+        elif self.tg=='国君':
+            beg_section_name1 = get_section_beg_end('国君1', section)[0][0]
+            end_section_name1 = get_section_beg_end('国君1', section)[0][1]
+            beg_section_name2 = get_section_beg_end('国君2', section)[0][0]
+            end_section_name2 = get_section_beg_end('国君2', section)[0][1]
+            beg_section_name3 = get_section_beg_end('国君3', section)[0][0]
+            end_section_name3 = get_section_beg_end('国君3', section)[0][1]
+            self.section_regex = '({}|{}|{})'.format(get_section_regex('国君', beg_section_name1, end_section_name1),\
+                get_section_regex('国君', beg_section_name2, end_section_name2),get_section_regex('国君', beg_section_name3, end_section_name3))
         else:
             beg_section_name = get_section_beg_end(self.tg, section)[0][0]
             end_section_name = get_section_beg_end(self.tg, section)[0][1]

@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="UTF-8")
 
 setup(
     name="jk_contract",
-    version="1.1.1",
+    version="1.1.3",
     description="Toolkit with functions designed to extract various information from JK contracts", 
     long_description=long_description,
     long_description_content_type="text/markdown",
