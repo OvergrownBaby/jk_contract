@@ -21,12 +21,14 @@ def get_section_regex(tg, beg_section_name, end_section_name):
                 return r'(?<='+beg_section_name+r')[\S\s\t\n]+?。(?=[\S\s\t\n]{,5}'+end_section_name+')'
         if tg=='招商': #done
                 return r'(?<=（[\S]{1,2}）'+beg_section_name+r')[\S\s\t\n]+?(?=（[\S]{1,2}）'+end_section_name+')'
-        if tg=='国君' or tg=='光大': #done
+        if tg=='光大': #done
                 return r'(?<=--	'+beg_section_name+r')[\S\s\n\t]+?(?=--	'+end_section_name+')'
         if tg=='海通': #done
                 return r'(?<=--		'+beg_section_name+r')[\S\s\n\t]+?(?=--		'+end_section_name+')'
         if tg=='兴业': #done
                 return r'(?<=--(\t| )'+beg_section_name+r')[\S\s\n\t]+?(?=--(\t|	)'+end_section_name+')'
+        if tg=='国君':
+                return r'((?<=--		'+beg_section_name+r')[\S\s\n\t]+?(?=--		'+end_section_name+')'+r'|(?<='+beg_section_name+r')[\S\s\t\n]+?。(?=[\S\s\t\n]{,5}'+end_section_name+'))'
 
 def get_section_beg_end(tg, req_section):
         sections_dict = {'华泰':['投资目标','投资范围','投资策略','业绩比较基准','投资限制','投资禁止行为'],
